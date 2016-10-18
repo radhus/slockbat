@@ -1,0 +1,9 @@
+# Slack
+slacker
+slacksocket
+
+# MongoDB
+pymongo
+mongoengine
+
+# Web?
