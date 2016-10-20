@@ -12,22 +12,18 @@ class Bot:
     def __init__(self, config):
         self.s = SlackSocket(config['slack'].get('token'))
 
-        # Wrap this in the connect call?
-        self.mongo_db = config['main'].get('mongo_db')
-        self.mongo_host = config['main'].get('mongo_host')
-        self.mongo_port = config['main'].getint('mongo_port')
-
         # Is this a good way to handle mongo connection? Seems weird.
+        # TODO check for connection timeout
         self.mongo = mongoengine
-        self.mongo.connect(self.mongo_db,
-                           host=self.mongo_host,
-                           port=self.mongo_port)
+        self.mongo.connect(config['mongo'].get('db'),
+                           host=config['mongo'].get('host'),
+                           port=config['mongo'].getint('port'))
 
     def start(self):
         for event in self.s.events():
             if event.type == 'message':
                 # TODO Pass when message has subtype, eg. message_changed.
-                # Maybe do this in a nicer way.
+                # Maybe do this in a nicer way. Use event.event (dict)?
                 if 'subtype' in event.json:
                     pass
                 else:
